@@ -11,7 +11,15 @@ public static class Program
     public static async Task<int> Main(string[] args)
     {
         Console.WriteLine("Update Firefox Profile preferences with default LibreWolf configuration");
-
+        
+        var isDryRun = args.Contains("--dry-run");
+        if (isDryRun)
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("Dry run enabled. No changes will be made.");
+            Console.ResetColor();
+        }
+        
         var profileDirs = GetProfileDirs(args);
         if (profileDirs == null)
             return 1;
@@ -24,7 +32,6 @@ public static class Program
         if (selectedProfileDirs == null)
             return 1;
         
-        var isDryRun = args.Contains("--dry-run");
         var libreWolfPreferences = ParseLibreWolfPreferences(libreWolfConfig);
         
         foreach (var selectedProfileDir in selectedProfileDirs)
